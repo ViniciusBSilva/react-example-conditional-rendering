@@ -11,15 +11,61 @@ function GuestGreeting(props) {
 }
 
 function Greeting(props) {
-    const isLoggedIn = props.isLoggedIn;
     return (
-        isLoggedIn ? <UserGreeting /> : <GuestGreeting />
+        props.isLoggedIn ? <UserGreeting /> : <GuestGreeting />
     );
+}
+
+function LoginButton(props) {
+    return (
+        <button onClick={props.onClick}>
+            Login
+        </button>
+    );
+}
+
+function LogoutButton(props) {
+    return (
+        <button onClick={props.onClick}>
+            Logout
+        </button>
+    );
+}
+
+// Stateful component
+class LoginControl extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleLoginClick = this.handleLoginClick.bind(this);
+        this.handleLogoutClick = this.handleLogoutClick.bind(this);
+        this.state = { isLoggedIn: false };
+    }
+
+    handleLoginClick() {
+        this.setState({ isLoggedIn: true });
+    }
+
+    handleLogoutClick() {
+        this.setState({ isLoggedIn: false });
+    }
+
+    render() {
+        const isLoggedIn = this.state.isLoggedIn;
+
+        const button = isLoggedIn ?
+            <LogoutButton onClick={this.handleLogoutClick} />
+            :
+            <LoginButton onClick={this.handleLoginClick} />;
+
+        return (
+            <>
+                <Greeting isLoggedIn={isLoggedIn} /> {button}
+            </>
+        );
+    }
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <Greeting
-        isLoggedIn={true}
-    />
+    <LoginControl />
 );
